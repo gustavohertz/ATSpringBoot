@@ -104,15 +104,13 @@ public class AdventurerService {
 
     @Transactional
     public AdventurerSummaryDto createAdventurer(Long orgId, CreateAdventurerDto dto) {
-        // Valida se a organização existe
+
         Organization org = organizationRepository.findById(orgId)
                 .orElseThrow(() -> new ResourceNotFoundException("Organização não encontrada"));
 
-        // Valida se o usuário existe
         User user = userRepository.findById(dto.usuarioId())
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        // Valida se o usuário pertence à mesma organização
         if (!user.getOrganization().getId().equals(orgId)) {
             throw new BusinessRuleException("O usuário não pertence à organização informada.");
         }
@@ -138,7 +136,6 @@ public class AdventurerService {
             throw new ResourceNotFoundException("Aventureiro pertence a outra organização");
         }
 
-        // Regra: cada aventureiro pode possuir no máximo UM companheiro
         if (adventurer.getCompanion() != null) {
             throw new BusinessRuleException("Este aventureiro já possui um companheiro.");
         }
@@ -162,7 +159,6 @@ public class AdventurerService {
             throw new ResourceNotFoundException("Organização inválida");
         }
 
-        // A remoção de aventureiro exclui o companheiro por causa do orphanRemoval no relacionamento
         adventurerRepository.delete(ad);
     }
 

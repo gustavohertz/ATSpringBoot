@@ -20,9 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes da Parte 3 - Consultas operacionais de Missões (H2).
- */
+
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -33,10 +31,6 @@ class MissionQueryTest {
 
     @Autowired
     private MissionParticipationRepository participationRepository;
-
-    // ==========================================
-    // Consulta 4: Listagem de missões com filtros
-    // ==========================================
 
     @Test
     void deveListarMissoesDaOrganizacao() {
@@ -87,10 +81,6 @@ class MissionQueryTest {
         assertThat(result.getContent())
                 .noneMatch(m -> "Busca pelo Palantir".equals(m.getTitulo()));
     }
-
-    // ==========================================
-    // Consulta 5: Detalhamento de missão
-    // ==========================================
 
     @Test
     void deveDetalharMissaoComParticipantes() {

@@ -28,8 +28,8 @@ public class PainelTaticoMissaoService {
     }
 
     @CacheEvict(value = "topMissoesCache", allEntries = true)
-    @Scheduled(fixedRate = 60000) // Limpa o cache a cada 60 segundos
+    @Scheduled(fixedRate = 60000)
     public void limparCacheTopMissoes() {
-        // Apenas um gatilho temporizado que invalida a chave de cache e força a view a ser reconsultada no próximo hit
+
     }
 }

@@ -5,11 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Configuração de segurança para testes.
- * Desabilita toda autenticação para que os testes de repositório
- * e integração não sejam bloqueados pelo Spring Security.
- */
+
 @TestConfiguration
 public class TestSecurityConfig {
 

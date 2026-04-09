@@ -26,17 +26,6 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Testes de slice da camada web utilizando @WebMvcTest.
- *
- * Isola o AdventurerController e testa os endpoints REST
- * mockando a camada de serviço (AdventurerService).
- *
- * Verifica:
- * - Status HTTP corretos (200, 201, 204)
- * - Conteúdo da resposta JSON
- * - Chamada correta dos métodos do serviço
- */
 @WebMvcTest(AdventurerController.class)
 @Import(TestSecurityConfig.class)
 class AdventurerControllerTest {

@@ -6,12 +6,7 @@ import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-/**
- * Configuração explícita do Elasticsearch.
- * 
- * Define o endpoint de conexão e habilita os repositórios
- * Elasticsearch no pacote de repositórios da aplicação.
- */
+
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.example.adventure_management_api.repository")
 public class ElasticsearchConfig extends ElasticsearchConfiguration {

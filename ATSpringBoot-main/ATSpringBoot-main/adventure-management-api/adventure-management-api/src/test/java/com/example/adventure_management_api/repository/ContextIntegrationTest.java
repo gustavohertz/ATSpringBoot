@@ -14,14 +14,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes de integração do schema audit contra PostgreSQL real.
- * 
- * Rodar com: 
- *   set RUN_INTEGRATION=true && mvn test -Dtest=ContextIntegrationTest
- * 
- * Estes testes são ignorados por padrão (requerem PostgreSQL local rodando).
- */
 @DataJpaTest
 @ActiveProfiles("integration")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

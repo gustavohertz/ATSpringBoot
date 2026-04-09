@@ -13,15 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
 
-/**
- * Configuração do Redis como provedor de cache e template para operações de dados.
- * 
- * O RedisCacheManager substitui o ConcurrentMapCacheManager padrão do Spring,
- * provendo cache distribuído com suporte a TTL (Time-To-Live).
- * 
- * O RedisTemplate permite operações diretas no Redis (get, set, delete)
- * para cenários que necessitem controle mais granular.
- */
+
 @Configuration
 public class RedisConfig {
 

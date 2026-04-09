@@ -17,8 +17,6 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    // --- Parte A ---
-
     @GetMapping("/busca/nome")
     public List<Produto> buscaPorNome(@RequestParam String termo) {
         return produtoService.buscaPorNome(termo);
@@ -44,8 +42,6 @@ public class ProdutoController {
         return produtoService.buscaMultiCampos(termo);
     }
 
-    // --- Parte B ---
-
     @GetMapping("/busca/com-filtro")
     public List<Produto> buscaComFiltro(@RequestParam String termo, @RequestParam String categoria) {
         return produtoService.buscaTextualComFiltroCategoria(termo, categoria);
@@ -61,7 +57,6 @@ public class ProdutoController {
         return produtoService.buscaAvancada(categoria, raridade, min, max);
     }
 
-    // --- Parte C ---
 
     @GetMapping("/agregacoes/por-categoria")
     public List<AgregacaoCountDto> agregacaoPorCategoria() {

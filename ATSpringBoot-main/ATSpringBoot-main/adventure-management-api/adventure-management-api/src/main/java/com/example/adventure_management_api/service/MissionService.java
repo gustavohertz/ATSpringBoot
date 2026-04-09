@@ -122,33 +122,28 @@ public class MissionService {
 
     @Transactional
     public MissionParticipationDto addParticipation(Long orgId, Long missionId, CreateParticipationDto dto) {
-        // Valida se a missão existe e pertence à organização
+
         Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Missão não encontrada"));
         if (!mission.getOrganization().getId().equals(orgId)) {
             throw new ResourceNotFoundException("Missão pertence a outra organização");
         }
 
-        // Regra: missão deve estar em estado compatível para aceitar participantes
         if (mission.getStatus() == MissionStatus.CONCLUIDA || mission.getStatus() == MissionStatus.CANCELADA) {
             throw new BusinessRuleException("Não é possível adicionar participantes a uma missão com status " + mission.getStatus() + ".");
         }
 
-        // Valida se o aventureiro existe
         Adventurer adventurer = adventurerRepository.findById(dto.aventureiroId())
                 .orElseThrow(() -> new ResourceNotFoundException("Aventureiro não encontrado"));
 
-        // Regra: aventureiro deve pertencer à mesma organização (separação organizacional)
         if (!adventurer.getOrganization().getId().equals(orgId)) {
             throw new BusinessRuleException("O aventureiro não pertence à mesma organização da missão.");
         }
 
-        // Regra: aventureiro inativo não pode ser associado a novas missões
         if (!adventurer.getAtivo()) {
             throw new BusinessRuleException("Aventureiro inativo não pode ser associado a novas missões.");
         }
 
-        // Regra: um mesmo aventureiro não pode participar mais de uma vez da mesma missão
         if (participationRepository.existsByMissionIdAndAdventurerId(missionId, dto.aventureiroId())) {
             throw new BusinessRuleException("Este aventureiro já participa desta missão.");
         }

@@ -20,14 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Serviço de busca e agregação de produtos no Elasticsearch (NoSQL).
- *
- * Demonstra três abordagens de consulta:
- * Parte A: Buscas textuais (match, match_phrase, fuzzy, multi_match)
- * Parte B: Buscas com filtros (categoria, faixa de preço, busca avançada)
- * Parte C: Agregações (por categoria, raridade, preço médio, faixas de preço)
- */
 @Service
 public class ProdutoService {
 
@@ -42,8 +34,6 @@ public class ProdutoService {
         this.elasticsearchOperations = elasticsearchOperations;
         this.esClient = esClient;
     }
-
-    // --- Parte A: Buscas textuais ---
 
     public List<Produto> buscaPorNome(String termo) {
         try {
@@ -105,8 +95,6 @@ public class ProdutoService {
         }
     }
 
-    // --- Parte B: Buscas com filtros ---
-
     public List<Produto> buscaTextualComFiltroCategoria(String termo, String categoria) {
         try {
             Criteria criteria = new Criteria("descricao").matches(termo)
@@ -139,8 +127,6 @@ public class ProdutoService {
             return Collections.emptyList();
         }
     }
-
-    // --- Parte C: Agregações ---
 
     public List<AgregacaoCountDto> agregacaoPorCategoria() {
         try {
@@ -222,10 +208,6 @@ public class ProdutoService {
         }
     }
 
-    /**
-     * Sanitiza o input do usuário para evitar injeção em queries JSON do
-     * Elasticsearch.
-     */
     private String sanitize(String input) {
         if (input == null)
             return "";

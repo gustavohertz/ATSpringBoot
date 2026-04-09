@@ -14,10 +14,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes do schema audit usando H2 em memória.
- * Valida que o mapeamento JPA do sistema legado funciona corretamente.
- */
+
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -56,7 +53,7 @@ class AuditSchemaH2Test {
 
         Set<Role> roles = userOpt.get().getRoles();
         assertThat(roles).isNotNull();
-        assertThat(roles).hasSize(2); // ADMIN + MEMBRO
+        assertThat(roles).hasSize(2);
         assertThat(roles).extracting(Role::getNome).containsExactlyInAnyOrder("ADMIN", "MEMBRO");
     }
 
@@ -65,7 +62,6 @@ class AuditSchemaH2Test {
         Optional<User> userOpt = userRepository.findById(1L);
         assertThat(userOpt).isPresent();
 
-        // Busca a role ADMIN do user
         Role adminRole = userOpt.get().getRoles().stream()
                 .filter(r -> "ADMIN".equals(r.getNome()))
                 .findFirst()
@@ -74,7 +70,7 @@ class AuditSchemaH2Test {
         assertThat(adminRole).isNotNull();
         Set<Permission> permissions = adminRole.getPermissions();
         assertThat(permissions).isNotNull();
-        assertThat(permissions).hasSize(4); // READ_USERS, WRITE_USERS, DELETE_USERS, READ_ADVENTURERS
+        assertThat(permissions).hasSize(4);
         assertThat(permissions).extracting(Permission::getCode)
                 .containsExactlyInAnyOrder("READ_USERS", "WRITE_USERS", "DELETE_USERS", "READ_ADVENTURERS");
     }
@@ -85,11 +81,11 @@ class AuditSchemaH2Test {
         assertThat(userOpt).isPresent();
 
         Set<Role> roles = userOpt.get().getRoles();
-        assertThat(roles).hasSize(1); // Apenas MEMBRO
+        assertThat(roles).hasSize(1);
 
         Role membroRole = roles.iterator().next();
         assertThat(membroRole.getNome()).isEqualTo("MEMBRO");
-        assertThat(membroRole.getPermissions()).hasSize(2); // READ_USERS, READ_ADVENTURERS
+        assertThat(membroRole.getPermissions()).hasSize(2);
     }
 
     @Test

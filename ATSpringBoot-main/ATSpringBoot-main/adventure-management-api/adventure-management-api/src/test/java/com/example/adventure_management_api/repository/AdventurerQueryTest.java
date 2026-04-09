@@ -20,9 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Testes da Parte 3 - Consultas operacionais de Aventureiros (H2).
- */
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -34,9 +31,6 @@ class AdventurerQueryTest {
     @Autowired
     private MissionParticipationRepository participationRepository;
 
-    // ==========================================
-    // Consulta 1: Listagem com filtros
-    // ==========================================
 
     @Test
     void deveListarAventureirosAtivosDaOrganizacao() {
@@ -115,10 +109,6 @@ class AdventurerQueryTest {
         assertThat(result.getContent().get(0).getNome()).isEqualTo("Gandalf");
     }
 
-    // ==========================================
-    // Consulta 2: Busca por nome parcial
-    // ==========================================
-
     @Test
     void deveBuscarPorNomeParcial() {
         Specification<Adventurer> spec = (root, query, cb) -> {
@@ -159,10 +149,6 @@ class AdventurerQueryTest {
         Page<Adventurer> result = adventurerRepository.findAll(spec, PageRequest.of(0, 10));
         assertThat(result.getTotalElements()).isEqualTo(0);
     }
-
-    // ==========================================
-    // Consulta 3: Perfil completo do aventureiro
-    // ==========================================
 
     @Test
     void deveCarregarPerfilCompletoComCompanheiro() {
