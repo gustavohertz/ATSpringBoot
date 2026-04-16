@@ -26,13 +26,10 @@ public class MissionController {
     @GetMapping
     public ResponseEntity<Page<MissionSummaryDto>> list(
             @RequestHeader("X-Organization-Id") Long orgId,
-            @RequestParam(required = false) MissionStatus status,
-            @RequestParam(required = false) MissionDangerLevel nivel,
-            @RequestParam(required = false) Instant dataInicio,
-            @RequestParam(required = false) Instant dataFim,
+            MissionFilterDto filter,
             Pageable pageable) {
 
-        return ResponseEntity.ok(missionService.search(orgId, status, nivel, dataInicio, dataFim, pageable));
+        return ResponseEntity.ok((Page<MissionSummaryDto>) missionService.search(orgId, filter, pageable));
     }
 
     @GetMapping("/{id}")

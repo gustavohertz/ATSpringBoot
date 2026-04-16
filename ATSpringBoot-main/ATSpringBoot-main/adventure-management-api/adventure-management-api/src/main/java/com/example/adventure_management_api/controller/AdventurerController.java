@@ -23,15 +23,18 @@ public class AdventurerController {
     @GetMapping
     public ResponseEntity<Page<AdventurerSummaryDto>> list(
             @RequestHeader("X-Organization-Id") Long orgId,
-            @RequestParam(required = false) Boolean ativo,
-            @RequestParam(required = false) AdventurerClass classe,
-            @RequestParam(required = false) Integer nivelMinimo,
-            @RequestParam(required = false) String nome,
+            AdventurerFullDto filter,
             Pageable pageable) {
 
-        return ResponseEntity.ok(adventurerService.search(orgId, ativo, classe, nivelMinimo, nome, pageable));
+        return ResponseEntity.ok(adventurerService.search(
+                orgId,
+                filter.ativo(),
+                filter.classe(),
+                filter.nivel(),
+                filter.nome(),
+                pageable
+        ));
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<AdventurerFullDto> getFullProfile(
             @RequestHeader("X-Organization-Id") Long orgId,

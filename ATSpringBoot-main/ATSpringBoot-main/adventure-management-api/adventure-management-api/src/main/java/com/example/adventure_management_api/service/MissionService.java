@@ -45,27 +45,15 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MissionSummaryDto> search(Long orgId, MissionStatus status, MissionDangerLevel nivel, Instant dataInicio, Instant dataFim, Pageable pageable) {
-        Specification<Mission> spec = (root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("organization").get("id"), orgId));
-
-            if (status != null) {
-                predicates.add(cb.equal(root.get("status"), status));
-            }
-            if (nivel != null) {
-                predicates.add(cb.equal(root.get("nivelPerigo"), nivel));
-            }
-            if (dataInicio != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("createdAt"), dataInicio));
-            }
-            if (dataFim != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), dataFim));
-            }
-            return cb.and(predicates.toArray(new Predicate[0]));
-        };
-
-        return missionRepository.findAll(spec, pageable).map(this::toSummaryDto);
+    public Page<MissionSummaryDto> search(Long orgId, MissionFullDto filter, Pageable pageable) {
+        return missionRepository.findById(
+                orgId,
+                filter.status(),
+                filter.nivelPerigo(),
+                filter.dataInicio(),
+                filter.dataTermino(),
+                pageable
+        );
     }
 
     @Transactional(readOnly = true)
@@ -202,5 +190,9 @@ public class MissionService {
 
     private MissionSummaryDto toSummaryDto(Mission m) {
         return new MissionSummaryDto(m.getId(), m.getTitulo(), m.getNivelPerigo(), m.getStatus(), m.getDataInicio(), m.getDataTermino());
+    }
+
+    public Object search(Long orgId, MissionFilterDto filter, Pageable pageable) {
+        return null;
     }
 }

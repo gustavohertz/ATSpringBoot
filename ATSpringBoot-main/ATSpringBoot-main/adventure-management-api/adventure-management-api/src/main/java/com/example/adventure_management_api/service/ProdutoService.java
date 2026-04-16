@@ -13,6 +13,8 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.StringQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.TextQueryType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,59 +38,47 @@ public class ProdutoService {
     }
 
     public List<Produto> buscaPorNome(String termo) {
-        try {
-            String queryStr = """
-                    { "match": { "nome": "%s" } }
-                    """.formatted(sanitize(termo));
-            SearchHits<Produto> hits = elasticsearchOperations.search(new StringQuery(queryStr), Produto.class);
-            return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q.match(m -> m.field("nome").query(termo)))
+                .build();
+        return executarBusca(query);
     }
 
     public List<Produto> buscaPorDescricao(String termo) {
-        try {
-            String queryStr = """
-                    { "match": { "descricao": "%s" } }
-                    """.formatted(sanitize(termo));
-            SearchHits<Produto> hits = elasticsearchOperations.search(new StringQuery(queryStr), Produto.class);
-            return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q.match(m -> m.field("descricao").query(termo)))
+                .build();
+        return executarBusca(query);
     }
 
     public List<Produto> buscaPorFrase(String frase) {
-        try {
-            String queryStr = """
-                    { "match_phrase": { "descricao": "%s" } }
-                    """.formatted(sanitize(frase));
-            SearchHits<Produto> hits = elasticsearchOperations.search(new StringQuery(queryStr), Produto.class);
-            return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q.matchPhrase(m -> m.field("descricao").query(frase)))
+                .build();
+        return executarBusca(query);
     }
 
     public List<Produto> buscaFuzzy(String termo) {
-        try {
-            String queryStr = """
-                    { "match": { "nome": { "query": "%s", "fuzziness": "AUTO" } } }
-                    """.formatted(sanitize(termo));
-            SearchHits<Produto> hits = elasticsearchOperations.search(new StringQuery(queryStr), Produto.class);
-            return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q.match(m -> m.field("nome")
+                        .query(termo)
+                        .fuzziness("AUTO")))
+                .build();
+        return executarBusca(query);
     }
 
     public List<Produto> buscaMultiCampos(String termo) {
+        NativeQuery query = NativeQuery.builder()
+                .withQuery(q -> q.multiMatch(mm -> mm
+                        .query(termo)
+                        .fields("nome", "descricao")))
+                .build();
+        return executarBusca(query);
+    }
+
+    private List<Produto> executarBusca(org.springframework.data.elasticsearch.core.query.Query query) {
         try {
-            String queryStr = """
-                    { "multi_match": { "query": "%s", "fields": ["nome", "descricao"] } }
-                    """.formatted(sanitize(termo));
-            SearchHits<Produto> hits = elasticsearchOperations.search(new StringQuery(queryStr), Produto.class);
+            SearchHits<Produto> hits = elasticsearchOperations.search(query, Produto.class);
             return hits.stream().map(SearchHit::getContent).collect(Collectors.toList());
         } catch (Exception e) {
             return Collections.emptyList();

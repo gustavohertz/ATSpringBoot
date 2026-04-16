@@ -2,6 +2,7 @@ package com.example.adventure_management_api.controller;
 
 import com.example.adventure_management_api.entity.Organization;
 import com.example.adventure_management_api.repository.OrganizationRepository;
+import com.example.adventure_management_api.service.OrganizacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,11 @@ public class OrganizacaoController {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+    private OrganizacaoService organizacaoService;
 
     @PostMapping
     public ResponseEntity<Organization> criarOrganizacao(@RequestBody Organization organization) {
-        if (organization.getCreatedAt() == null) {
-            organization.setCreatedAt(Instant.now());
-        }
-
-        Organization savedOrganization = organizationRepository.save(organization);
+        Organization savedOrganization = organizacaoService.create(organization);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrganization);
     }
 

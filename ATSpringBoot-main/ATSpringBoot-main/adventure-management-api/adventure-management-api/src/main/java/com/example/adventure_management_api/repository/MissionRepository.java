@@ -1,6 +1,11 @@
 package com.example.adventure_management_api.repository;
 
+import com.example.adventure_management_api.dto.MissionSummaryDto;
 import com.example.adventure_management_api.entity.Mission;
+import com.example.adventure_management_api.entity.enums.MissionDangerLevel;
+import com.example.adventure_management_api.entity.enums.MissionStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +32,6 @@ public interface MissionRepository extends JpaRepository<Mission, Long>, JpaSpec
            @Param("dataInicio") Instant dataInicio,
            @Param("dataTermino") Instant dataTermino
     );
+
+    Page<MissionSummaryDto> findById(Long orgId, MissionStatus status, MissionDangerLevel missionDangerLevel, Instant instant, Instant instant1, Pageable pageable);
 }
